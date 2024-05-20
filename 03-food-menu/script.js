@@ -80,3 +80,70 @@ const menu = [
       desc: `Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nihil repellendus repellat exercitationem commodi! Cumque perferendis molestias iste aliquam, nulla, qui reprehenderit ea, sequi eveniet dolorem praesentium aliquid aperiam vel libero!`,
   },
 ];
+
+window.addEventListener('DOMContentLoaded', () => {
+  displayMenuButtons();
+  displayMenuItems(menu);
+})
+
+const sectionCenterEl = document.querySelector('.section-center')
+const btnContainerEl = document.querySelector('.btn-container')
+
+function displayMenuButtons() {
+  // reduce 누적, 하나씩 추가
+  const categories = menu.reduce((acc, curr) => {
+    if(!acc.includes(curr.category)) {
+      acc.push(curr.category);
+    }
+    return acc;
+  },['all'])
+
+  const categoryBtns = categories
+  .map((category) => {
+    return `<button type="button" class="filter-btn" data-id=${category}>${category}
+    </button>`
+  })
+  .join('');
+
+  btnContainerEl.innerHTML = categoryBtns;
+
+  const filtersBtns = btnContainerEl.querySelectorAll('.filter-btn');
+
+  filtersBtns.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      const category = e.currentTarget.dataset.id;
+
+      const menuCategory = menu.filter((menuItem) => {
+        if(menuItem.category === category) {
+          return menuItem;
+        }
+      })
+
+      if(category === 'all') {
+        displayMenuItems(menu);
+      } else {
+        displayMenuItems(menuCategory)
+      }
+    })
+  })
+}
+
+function displayMenuItems(menuItems) {
+  let displayMenu = menuItems.map((item) => {
+    return  `<article class="menu-item">
+    <img src=${item.img} alt=${item.title} class="photo" />
+    <div class="item-info">
+        <div class="header">
+            <h4>${item.title}</h4>
+            <h4 class="price">${item.price}원</h4>
+        </div>
+        <p class="item-text">
+            ${item.desc}
+        </p>
+    </div>
+    </article>`
+
+  })
+  displayMenu = displayMenu.join('');
+  sectionCenterEl.innerHTML = displayMenu;
+}
