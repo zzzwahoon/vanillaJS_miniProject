@@ -1,31 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css"
     />
     <style>
-      .success, .error {
-          color: white;
-          padding: 5px;
-          margin: 5px 0 15px 0;
+      .success,
+      .error {
+        color: white;
+        padding: 5px;
+        margin: 5px 0 15px 0;
       }
 
       .success {
-          background-color: green;
+        background-color: green;
       }
 
       .error {
-          background-color: red;
+        background-color: red;
       }
-  </style>
-</head>
-<body>
-  
-  <script type="module" src="./script.js"></script>
-</body>
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Product list</h1>
+      <form id="product-form">
+        <div>
+          <input
+            type="text"
+            id="name"
+            placeholder="name"
+            class="u-full-width"
+          />
+        </div>
+        <div>
+          <input
+            type="number"
+            id="price"
+            placeholder="price"
+            class="u-full-width"
+          />
+        </div>
+        <div>
+          <input
+            type="number"
+            id="year"
+            min="1999"
+            max="2999"
+            step="1"
+            placeholder="2024"
+            class="u-full-width"
+          />
+        </div>
+        <input type="submit" value="save" class="u-full-width" />
+        <div id="product-list" class="u-full-width"></div>
+      </form>
+    </div>
+    <script type="module" src="./script.js"></script>
+  </body>
 </html>
