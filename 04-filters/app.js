@@ -1,7 +1,27 @@
+// 모든 상품 나열하기
 const productsContainerEl = document.querySelector('.products-container');
 
+// 원본 데이터 보존, 불변성
+let filteredProducts = [...products];
+///////
+
+// 검색
+const formEl = document.querySelector('.input-form');
+const searchInputEl = document.querySelector('.search-input');
+
+formEl.addEventListener('keyup', () => {
+  const inputValue = searchInputEl.value;
+
+  filteredProducts = products.filter(product => {
+    return product.title.toLowerCase().includes(inputValue);
+  })
+
+  displayProducts();
+})
+
+
 const displayProducts = () => {
-  productsContainerEl.innerHTML = products.map((product) => {
+  productsContainerEl.innerHTML = filteredProducts.map((product) => {
     const { id, title, image, price } = product;
     return `<article class="product" data-id="${id}">
     <img
@@ -19,7 +39,9 @@ const displayProducts = () => {
 }
 
 displayProducts();
+///////
 
+// 상품 회사 이름 나열하기 (메뉴 버튼)
 const compainesEl = document.querySelector('.companies');
 
 const displayButtons = () => {
@@ -36,3 +58,21 @@ const displayButtons = () => {
 }
 
 displayButtons();
+////////
+
+// 필터링 기능
+compainesEl.addEventListener('click', (e) => {
+  const el = e.target;
+  console.log(el);
+  if(el.classList.contains('company-btn')) {
+    if(el.dataset.id === 'all') {
+      filteredProducts = [...products];
+    } else {
+      filteredProducts = products.filter((product) => {
+        return product.company === el.dataset.id;
+      })
+    }
+
+    displayProducts();
+  }
+})
