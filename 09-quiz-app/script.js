@@ -40,6 +40,10 @@ let shuffledQuestions;
 let currentQuestionIndex;
 
 startButton.addEventListener('click', startGame);
+nextButton.addEventListener('click', () => {
+  currentQuestionIndex += 1;
+  setNextQuestion();
+})
 
 function startGame() {
   // start 버튼 가리기
@@ -53,10 +57,13 @@ function startGame() {
 
   // Container 요소의 hide 속성 제거
   questionContainerEl.classList.remove('hide');
+
+  setNextQuestion();
 }
 
 function setNextQuestion() {
-  
+  resetState();
+  showQuestion(shuffledQuestions[currentQuestionIndex]);
 }
 
 function showQuestion(question) {
@@ -75,11 +82,62 @@ function showQuestion(question) {
     }
 
     // 이벤트 리스너추가
-    button.addEventListener('click', selectAnser);
+    button.addEventListener('click', selectAnswer);
     answerButtonEl.appendChild(button);
   })
 }
 
-function selectAnser(e) {
+function selectAnswer(e) {
+  // 클릭이 된 버튼의 노드를 상수에 할당
+  const selectedButton = e.target;
+  // 선태깅 된 버튼이 정답이면 true 아니면 false
+  const correct = selectedButton.dataset.correct;
 
+  // 선택한 버튼이 정답이라면 body class correct, 아니면 wrong 
+  setStatusClass(document.body, correct);
+
+  // 각 버튼이 정답 버튼이라면 correct, 아니라면 wrong class
+  Array.from(answerButtonEl.children).forEach((button) => {
+    setStatusClass(button, button.dataset.correct);
+  })
+
+  // 모든 문제를 다 풀었으면 restart 버튼 보이기
+  // 그게 아니면 next 버튼 보이기
+  if (shuffledQuestions.length > currentQuestionIndex + 1) {
+    nextButton.classList.remove('hide');
+  } else {
+    startButton.innerText = 'Restart';
+    startButton.classList.remove('hide');
+  }
 }
+
+function setStatusClass(element, correct) {
+  // 원래 있던 correct, wrong class 지우기
+  clearStatusClass(element);
+
+  // 정답이면 element class 속성에 correct, 아니면 wrong
+  if (correct) {
+    element.classList.add('correct');
+  } else {
+    element.classList.add('wrong');
+  }
+}
+
+function clearStatusClass(element) {
+  element.classList.remove('correct');
+  element.classList.remove('wrong');
+}
+
+function resetState() {
+  // body 에서 correct와 wrong 클래스 지우기
+  clearStatusClass(document.body);
+
+  // 다음 버튼 요소에 hide 속성 넣어서 숨기기
+  nextButton.classList.add('hide');
+
+  // answer buttons div안에 있는 버튼 모드 지우기
+  while (answerButtonEl.firstChild) {
+    answerButtonEl.removeChild(answerButtonEl.firstChild);
+  }
+}
+
